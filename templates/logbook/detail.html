@@ -1,0 +1,10 @@
+{% extends "logbook/logbook.html" %}
+
+{% block title %}Logbook entries{% endblock %}
+
+{% block body %}
+<div id=editlinks><a href="{% url 'logbook:entryupdate' entry.id %}">edit</a>&nbsp;<a href="{% url 'logbook:entrydelete' entry.id %}">delete</a></div>
+<div id=detail>{{ entry.user }}:{{ entry.group }} ({{ entry.timestamp|timesince }})</div>
+<div id=entrytext>{{ entry|linebreaks }}</div>
+<div id=entrytags>Tags:&nbsp;{% for tag in entry.tag.all %}<a href={% url 'logbook:tag' tag %}>{{ tag }}</a>&nbsp;{% endfor %}</div>
+{% endblock %}

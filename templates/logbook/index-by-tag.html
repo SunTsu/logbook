@@ -1,0 +1,19 @@
+{% extends "logbook/logbook.html" %}
+
+{% block title %}Logbook entries{% endblock %}
+
+{% block body %}
+{% if entries %}
+{% regroup entries|dictsort:'get_tag_display' by get_tag_display as entries_by_tag %}
+	{% for group in entries_by_tag %}
+	<h3> {{ group.grouper }}</h4>
+	<ul>
+		{% for entry in group.list %}
+	<li>{{ entry.timestamp}} <a href="{% url 'logbook:detail' entry.id %}">{{ entry.text }}</a>&nbsp;(<a href="{% url 'logbook:user' entry.user %}">{{ entry.user }}</a>:<a href="{% url 'logbook:group' entry.group %}">{{ entry.group }}</a>)</li>
+	{% endfor %}
+	</ul>
+	{% endfor %}
+{% else %}
+	<p>No entries found.</p>
+{% endif %}
+{% endblock %}

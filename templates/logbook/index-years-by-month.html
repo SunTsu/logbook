@@ -1,0 +1,23 @@
+{% extends "logbook/logbook.html" %}
+
+{% block title %}Logbook entries{% endblock %}
+
+{% block body %}
+{% if entries %}
+{% regroup entries by timestamp|date:"Y" as entries_by_year %}
+{% for yeargroup in entries_by_year %}
+<h3>{{ yeargroup.grouper }}</h4>
+{% regroup yeargroup.list by timestamp|date:"F" as entries_by_month %}
+	{% for group in entries_by_month %}
+	<h4> {{ group.grouper }}</h4>
+	<ul>
+		{% for entry in group.list %}
+	<li>{{ entry.timestamp}} <a href="{% url 'logbook:detail' entry.id %}">{{ entry.text }}</a>&nbsp;(<a href="{% url 'logbook:user' entry.user %}">{{ entry.user }}</a>:<a href="{% url 'logbook:group' entry.group %}">{{ entry.group }}</a>)</li>
+	{% endfor %}
+	</ul>
+	{% endfor %}
+{% endfor %}
+{% else %}
+	<p>No entries found.</p>
+{% endif %}
+{% endblock %}

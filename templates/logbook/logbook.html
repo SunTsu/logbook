@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}Logbook entries{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block sidebar %}
+<h4>Entries</h4>
+<h5>Functions</h5>
+<ul id=menu>
+	<li><a href={% url 'logbook:entrycreate' %}>Add entry</a></li>
+</ul>
+<h5>Sorting</h5>
+<ul id=menu>
+	<li><a href={% url 'logbook:index' %}>All entries, sorted by time</a></li>
+	<li><a href={% url 'logbook:indexbyuser' %}>All entries, grouped by user</a></li>
+	<li><a href={% url 'logbook:indexbygroup' %}>All entries, grouped by group</a></li>
+	<li><a href={% url 'logbook:indexyearsbymonth' %}>All entries, grouped by year&amp;month</a></li>
+	<li><a href={% url 'logbook:indexbymonth' %}>This year's entries, grouped by month</a></li>
+</ul>
+<h5>Filters</h5>
+<ul id=menu>
+	<li><a href={% url 'logbook:index' %}>All entries</a></li>
+	<li><a href={% url 'logbook:indextoday' %}>Today's entries</a></li>
+	<li><a href={% url 'logbook:indexyesterday' %}>Yesterday's entries</a></li>
+	<li><a href={% url 'logbook:indexweek' %}>Last 7 days' entries</a></li>
+	<li><a href={% url 'logbook:indexmonth' %}>This month's entries</a></li>
+	<li><a href={% url 'logbook:indexyear' %}>This year's entries</a></li>
+</ul>
+<hr />
+{% endblock %}
