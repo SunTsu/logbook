@@ -112,6 +112,12 @@ class EntryDetails(DetailView):
     model=Entry
     template_name='logbook/detail.html'
 
+class TagDetails(DetailView):
+    "Tag detail view"
+
+    model=Tag
+    template_name='logbook/tag_details.html'
+
 class TagCreate(CreateView):
     "Tag create form view"
 

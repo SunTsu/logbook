@@ -1,0 +1,19 @@
+{% extends "logbook/logbook.html" %}
+{% block body %}
+<form method="post">{% csrf_token %}
+	Delete the following tag? 
+	<div id=tagname>{{ tag.name }}</div>
+	<div id=tagused><br />{% if tag.entry_set.all|length != 0 %}This tag is used for the following logbook entries:
+	<ul>
+		{% for entry in tag.entry_set.all %}
+		<li><a href="{% url 'logbook:detail' entry.id %}">{{ entry.text }}</a></li>
+		{% endfor %}
+	</ul>
+	{% else %}
+	<b>This tag is not used anywhere</b>
+	{% endif %}
+</div>
+	<input type="submit" value="Submit" />
+	<input type="submit" name="Cancel" value="Cancel">
+</form>
+{% endblock %}
