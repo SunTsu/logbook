@@ -14,10 +14,10 @@
 <h5>Sorting</h5>
 <ul id=menu>
 	<li><a href={% url 'logbook:index' %}>All entries, sorted by time</a></li>
-	<li><a href={% url 'logbook:indexbyuser' %}>All entries, grouped by user</a></li>
-	<li><a href={% url 'logbook:indexbygroup' %}>All entries, grouped by group</a></li>
-	<li><a href={% url 'logbook:indexyearsbymonth' %}>All entries, grouped by year&amp;month</a></li>
-	<li><a href={% url 'logbook:indexbymonth' %}>This year's entries, grouped by month</a></li>
+	<li><a href={% url 'logbook:indexby' 'user' %}>All entries, grouped by user</a></li>
+	<li><a href={% url 'logbook:indexby' 'group' %}>All entries, grouped by group</a></li>
+	<li><a href={% url 'logbook:indexby' 'yearsmonth' %}>All entries, grouped by year&amp;month</a></li>
+	<li><a href={% url 'logbook:indexby' 'month' %}>This year's entries, grouped by month</a></li>
 </ul>
 <h5>Filters</h5>
 <ul id=menu>

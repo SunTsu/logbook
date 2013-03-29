@@ -3,14 +3,18 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import DetailView, ListView
+from django.views.generic.dates import ArchiveIndexView, TodayArchiveView, DayArchiveView, WeekArchiveView, MonthArchiveView, YearArchiveView
 from django.utils import timezone
 from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
+from datetime import timedelta
 
 from logbook.models import Entry, Tag, User, Group
 from logbook.forms import EntryForm
 
 class UserEntryList(ListView):
+    "View Class that lists all Entries of a given User"
 
     template_name = 'logbook/index.html'
     context_object_name = 'entries'
@@ -21,6 +25,7 @@ class UserEntryList(ListView):
         return self.user.entry_set.all().order_by('-timestamp')
 
 class GroupEntryList(ListView):
+    "View Class that lists all Entries of a given Group"
 
     template_name = 'logbook/index.html'
     context_object_name = 'entries'
@@ -31,6 +36,7 @@ class GroupEntryList(ListView):
         return self.group.entry_set.all().order_by('-timestamp')
 
 class TagEntryList(ListView):
+    "View Class that lists all Entries having a certain Tag"
 
     template_name = 'logbook/index.html'
     context_object_name = 'entries'
@@ -40,35 +46,113 @@ class TagEntryList(ListView):
             self.tag = get_object_or_404(Tag, name=self.args[0])
         return self.tag.entry_set.all().order_by('-timestamp')
 
+class MyIndexView():
+    "View class that only sets defaults for Index views. Not to be used on it's own"
+
+    num_latest = 5000
+    allow_empty = True
+    queryset=Entry.objects.all()
+    date_field = 'timestamp'
+    context_object_name='entries'
+    template_name='logbook/index.html'
+    make_object_list = True
+    month_format = '%m'
+
+
+class EntryIndex(MyIndexView, ArchiveIndexView):
+    "Index view for Entries, latest first"
+    pass
+
+class EntryGroupBy(EntryIndex):
+    "Group Entries by Tag, User, Group"
+
+    def get_queryset(self):
+        grouper = self.kwargs['grouper']
+        self.template_name='logbook/index-by-%s.html' % (grouper)
+        return Entry.objects.all().order_by('-timestamp')
+
+class EntryIndexToday(MyIndexView, TodayArchiveView):
+    "Today's Entries View"
+    pass
+
+class EntryIndexYesterday(MyIndexView, DayArchiveView):
+    "Yesterday's Entries View"
+
+    yesterday = (timezone.now()-timedelta(days=1))
+    day = str(yesterday.day)
+    month = str(yesterday.month)
+    year = str(yesterday.year)
+
+class EntryIndexThisWeek(MyIndexView, WeekArchiveView):
+    "This week's Entries View"
+
+    now = timezone.now()
+    year = str(now.year)
+    month = str(now.month)
+    week = str((now-timedelta(days=now.weekday())).strftime("%U"))
+
+class EntryIndexMonth(MyIndexView, MonthArchiveView):
+    "Entries Index View for a given month"
+    pass
+
+class EntryIndexThisMonth(EntryIndexMonth):
+    "This month's Entries View"
+
+    now = timezone.now()
+    year = str(now.year)
+    month = str(now.month)
+
+class EntryIndexThisYear(MyIndexView, YearArchiveView):
+    "This year's Entries View"
+    year = str(timezone.now().year)
+
+class EntryDetails(DetailView):
+    "Entry detail view"
+
+    model=Entry
+    template_name='logbook/detail.html'
+
 class TagCreate(CreateView):
+    "Tag create form view"
+
     model = Tag
     success_url = reverse_lazy('logbook:index')
 
 class TagUpdate(UpdateView):
+    "Tag update form view"
+
     model = Tag
     success_url = reverse_lazy('logbook:index')
 
 class TagDelete(DeleteView):
+    "Tag delete form view"
+
     model = Tag
     success_url = reverse_lazy('logbook:index')
 
 class EntryCreate(CreateView):
+    "Entry create form view"
+
     form_class = EntryForm
     model = Entry
     success_url = reverse_lazy('logbook:index')
 
     def form_valid(self, form):
+        "Add current User and timestamp values to new Entry"
         form.instance.user = self.request.user
         form.instance.timestamp = timezone.now()
 
         return super(EntryCreate, self).form_valid(form)
 
 class EntryUpdate(UpdateView):
+    "Entry update form view"
+
     model = Entry
     form_class = EntryForm
     success_url = reverse_lazy('logbook:index')
 
 class EntryDelete(DeleteView):
+    "Entry delete form view"
     model = Entry
     success_url = reverse_lazy('logbook:index')
 
