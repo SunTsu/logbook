@@ -141,6 +141,7 @@ class EntryCreate(CreateView):
         "Add current User and timestamp values to new Entry"
         form.instance.user = self.request.user
         form.instance.timestamp = timezone.now()
+        form.instance.changed_timestamp = timezone.now()
 
         return super(EntryCreate, self).form_valid(form)
 
@@ -150,6 +151,12 @@ class EntryUpdate(UpdateView):
     model = Entry
     form_class = EntryForm
     success_url = reverse_lazy('logbook:index')
+
+    def form_valid(self, form):
+        "Add changed timestamp to updated Entry"
+        form.instance.changed_timestamp = timezone.now()
+
+        return super(EntryUpdate, self).form_valid(form)
 
 class EntryDelete(DeleteView):
     "Entry delete form view"

@@ -13,6 +13,7 @@ class Tag(models.Model):
 
 class Entry(models.Model):
     timestamp = models.DateTimeField('Date published',default=timezone.now())
+    changed_timestamp = models.DateTimeField('Date changed', default=timezone.now())
     text = models.TextField('log entry', max_length=5000)
     user = models.ForeignKey(User)
     group = models.ForeignKey(Group)
