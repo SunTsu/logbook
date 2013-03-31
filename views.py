@@ -74,7 +74,6 @@ class EntrySearchIndex(MyIndexView, FormView):
     form_class = EntrySearchForm
     #def get(self, request, *args, **kwargs):
     def post(self, request, *args, **kwargs):
-        print request.POST
         post = text__contains=request.POST
         self.entries = Entry.objects.filter(text__contains=post['text']).order_by('-timestamp')
 
