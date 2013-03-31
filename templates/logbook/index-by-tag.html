@@ -4,15 +4,18 @@
 
 {% block body %}
 {% if entries %}
-{% regroup entries|dictsort:'get_tag_display' by get_tag_display as entries_by_tag %}
-	{% for group in entries_by_tag %}
-	<h3> {{ group.grouper }}</h4>
-	<ul>
-		{% for entry in group.list %}
-	<li>{{ entry.timestamp}} <a href="{% url 'logbook:detail' entry.id %}">{{ entry.text }}</a>&nbsp;(<a href="{% url 'logbook:user' entry.user %}">{{ entry.user }}</a>:<a href="{% url 'logbook:group' entry.group %}">{{ entry.group }}</a>)</li>
+{% for tag in logbook.tags %}
+<h3><a href="{% url 'logbook:tag' tag %}">{{ tag }}</a>&nbsp;(<a href="{% url 'logbook:tagupdate' tag.id %}">edit</a>&nbsp;<a href="{% url 'logbook:tagdelete' tag.id %}">delete</a>)</h3>
+<ul>
+	{% for entry in entries %}
+		{% if tag in entry.tag.all %}
+			<li>{{ entry.timestamp}} <a href="{% url 'logbook:detail' entry.id %}">{{ entry.text }}</a>&nbsp;(<a href="{% url 'logbook:user' entry.user %}">{{ entry.user }}</a>:<a href="{% url 'logbook:group' entry.group %}">{{ entry.group }}</a>)</li>
+		{% endif %}
 	{% endfor %}
-	</ul>
-	{% endfor %}
+</ul>
+{% empty %}
+	<p>No entries found.</p>
+{% endfor %}
 {% else %}
 	<p>No entries found.</p>
 {% endif %}

@@ -31,11 +31,6 @@ class Entry(models.Model):
     def entered_during_seven_days(self):
         return (timezone.now()-self.timestamp).days < 7
 
-    def get_tag_display(self):
-        tags = Tag.objects.all()
-        tag_display = [tag.name for tag in tags]
-        return tag_display
-
     def __unicode__(self):
         return self.text
 
