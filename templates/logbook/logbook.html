@@ -29,4 +29,15 @@
 	<li><a href={% url 'logbook:indexyear' %}>This year's entries</a></li>
 </ul>
 <hr />
+<h4>Tags</h4>
+<h5>Functions</h5>
+<ul id=menu>
+	<li><a href={% url 'logbook:tagcreate' %}>Add tag</a></li>
+</ul>
+<h5>Tag cloud</h5>
+<div id=taglist>
+	{% for tag in logbook.tags %}
+	<a href="{% url 'logbook:tag' tag %}">{{ tag }}</a> 
+	{% endfor %}
+</div>
 {% endblock %}
