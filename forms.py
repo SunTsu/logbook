@@ -5,3 +5,8 @@ class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
         exclude = ('user', 'timestamp', 'changed_timestamp')
+
+class EntrySearchForm(forms.ModelForm):
+    class Meta:
+        model = Entry
+        exclude = ('tag', 'timestamp', 'changed_timestamp')

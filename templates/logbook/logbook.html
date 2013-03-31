@@ -6,10 +6,16 @@
 {% endblock %}
 
 {% block sidebar %}
+<form method="post" action="{% url 'logbook:entrysearch' %}">{% csrf_token %}
+	<input type="text" size="15" maxlength="15" name="text"></input><input type="submit" value="Search" />
+	<input type="hidden" name="user" value=''></input>
+	<input type="hidden" name="group" value=''></input>
+</form>
 <h4>Entries</h4>
 <h5>Functions</h5>
 <ul id=menu>
 	<li><a href={% url 'logbook:entrycreate' %}>Add entry</a></li>
+	<li><a href={% url 'logbook:entrysearch' %}>Search entry</a></li>
 </ul>
 <h5>Sorting</h5>
 <ul id=menu>

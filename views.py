@@ -1,9 +1,10 @@
 from django.views.generic import ListView
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.shortcuts import render, render_to_response, get_object_or_404
+from django.template import RequestContext
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import DetailView, ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormMixin
+from django.views.generic import DetailView, ListView, FormView
 from django.views.generic.dates import ArchiveIndexView, TodayArchiveView, DayArchiveView, WeekArchiveView, MonthArchiveView, YearArchiveView
 from django.utils import timezone
 from django.core.urlresolvers import reverse_lazy
@@ -11,7 +12,7 @@ from django.utils.decorators import method_decorator
 from datetime import timedelta
 
 from logbook.models import Entry, Tag, User, Group
-from logbook.forms import EntryForm
+from logbook.forms import EntryForm, EntrySearchForm
 
 class UserEntryList(ListView):
     "View Class that lists all Entries of a given User"
@@ -67,6 +68,26 @@ class MyIndexView():
 class EntryIndex(MyIndexView, ArchiveIndexView):
     "Index view for Entries, latest first"
     pass
+
+class EntrySearchIndex(MyIndexView, FormView):
+    template_name = 'logbook/entry_form.html'
+    form_class = EntrySearchForm
+    #def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        print request.POST
+        post = text__contains=request.POST
+        self.entries = Entry.objects.filter(text__contains=post['text']).order_by('-timestamp')
+
+        #Get user and filter
+        if post['user'] != u'':
+            user = get_object_or_404(User, id=int(post['user']))
+            self.entries = self.entries.filter(user_id=user.id)
+
+        #Get group and filter
+        if post['group'] != u'':
+            group = get_object_or_404(Group, id=int(post['group']))
+            self.entries = self.entries.filter(group_id=group.id)
+        return render_to_response("logbook/index.html", {'entries': self.entries }, context_instance=RequestContext(request))
 
 class EntryGroupBy(EntryIndex):
     "Group Entries by Tag, User, Group"
