@@ -3,6 +3,9 @@
 {% block title %}Logbook entries{% endblock %}
 
 {% block body %}
+{% if tag %}
+<h3>{{ tag }}&nbsp;(<a href="{% url 'logbook:tagupdate' tag.id %}">edit</a>&nbsp;<a href="{% url 'logbook:tagdelete' tag.id %}">delete</a>)</h3>
+{% endif %}
 {% if entries %}
 	<ul>
 	{% for entry in entries %}

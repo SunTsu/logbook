@@ -46,6 +46,11 @@ class TagEntryList(ListView):
             self.tag = get_object_or_404(Tag, name=self.args[0])
         return self.tag.entry_set.all().order_by('-timestamp')
 
+    def get_context_data(self, **kwargs):
+        context = super(TagEntryList, self).get_context_data(**kwargs)
+        context['tag'] = self.tag
+        return context
+
 class MyIndexView():
     "View class that only sets defaults for Index views. Not to be used on it's own"
 
