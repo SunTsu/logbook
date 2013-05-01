@@ -16,7 +16,7 @@ class Entry(models.Model):
     changed_timestamp = models.DateTimeField('Date changed', default=timezone.now())
     text = models.TextField('log entry', max_length=5000)
     user = models.ForeignKey(User)
-    group = models.ForeignKey(Group)
+    group = models.ForeignKey(Group, default=Group.objects.get(id=1))
     tag = models.ManyToManyField(Tag, blank=True, null=True)
 
     def entered_today(self):
