@@ -3,6 +3,29 @@
 {% block title %}Logbook entries{% endblock %}
 
 {% block body %}
+<form method="post" action="{% url 'logbook:entrycreate' %}">{% csrf_token %}
+	{% if form.errors %}
+	<p style="color: red;">
+	Please correct the error{{ form.errors|pluralize }} below.
+	</p>
+	{% endif %}
+	<div if="text">
+		{{ form.text.errors }}
+		<label for="id_text">Log entry:</label><br>
+		<textarea cols="80" id="id_text" name="text" rows="3"> </textarea>
+
+        </div>
+	<div if="rest">
+		{{ form.tag.errors }}
+		<label for="id_tag">Tags:</label>
+		{{ form.tag }}
+		{{ form.group.errors }}
+		<label for="id_group">Group:</label>
+		{{ form.group }}
+		<input type="submit" value="Submit" />
+	</div>
+</form>
+<hr />
 {% endblock %}
 
 {% block sidebar %}

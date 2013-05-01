@@ -64,10 +64,15 @@ class MyIndexView():
     make_object_list = True
     month_format = '%m'
 
-
 class EntryIndex(MyIndexView, ArchiveIndexView):
     "Index view for Entries, latest first"
-    pass
+
+    def get_context_data(self, **kwargs):
+        context = {
+                'form': EntryForm(),
+                }
+        context.update(kwargs)
+        return super(EntryIndex, self).get_context_data(**context)
 
 class EntrySearchIndex(MyIndexView, FormView):
     template_name = 'logbook/entry_form.html'
