@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.utils import timezone
+from django.core.validators import RegexValidator
 
 class Tag(models.Model):
-    name = models.CharField('tag', max_length=20)
+    name = models.CharField('tag', max_length=20, validators=[RegexValidator(regex="^[\w_-]$", message="Sorry, tags may consist of letters, numbers, dashes (-) and underscores(_).")])
 
     def __unicode__(self):
         return self.name
