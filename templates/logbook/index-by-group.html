@@ -9,7 +9,7 @@
 	<h3> {{ group.grouper }}</h4>
 	<ul>
 		{% for entry in group.list %}
-	<li>{{ entry.timestamp}} <a href="{% url 'logbook:detail' entry.id %}">{{ entry.text }}</a>&nbsp;(<a href="{% url 'logbook:group' entry.user %}">{{ entry.user }}</a>:<a href="{% url 'logbook:group' entry.group %}">{{ entry.group }}</a>)</li>
+		<li>{{ entry.timestamp}} <a href="{% url 'logbook:detail' entry.id %}">{{ entry.text }}</a>&nbsp;(<a href="{% url 'logbook:group' entry.user %}">{{ entry.user }}</a>:<a href="{% url 'logbook:group' entry.group %}">{{ entry.group }}</a>)</li><br />
 	{% endfor %}
 	</ul>
 	{% endfor %}

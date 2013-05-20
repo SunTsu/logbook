@@ -9,7 +9,7 @@
 <ul>
 	{% for entry in entries %}
 		{% if tag in entry.tag.all %}
-			<li>{{ entry.timestamp}} <a href="{% url 'logbook:detail' entry.id %}">{{ entry.text }}</a>&nbsp;(<a href="{% url 'logbook:user' entry.user %}">{{ entry.user }}</a>:<a href="{% url 'logbook:group' entry.group %}">{{ entry.group }}</a>)</li>
+		<li>{{ entry.timestamp}} <a href="{% url 'logbook:detail' entry.id %}">{{ entry.text }}</a>&nbsp;(<a href="{% url 'logbook:user' entry.user %}">{{ entry.user }}</a>:<a href="{% url 'logbook:group' entry.group %}">{{ entry.group }}</a>)</li><br />
 		{% endif %}
 	{% endfor %}
 </ul>
