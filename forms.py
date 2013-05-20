@@ -4,7 +4,7 @@ from logbook.models import Entry, Tag, User, Group
 class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
-        exclude = ('user', 'timestamp', 'changed_timestamp')
+        exclude = ('user', 'changed_timestamp')
 
 class EntrySearchForm(forms.ModelForm):
     class Meta:
